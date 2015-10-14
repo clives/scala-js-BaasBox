@@ -38,7 +38,7 @@ jsDependencies += ProvidedJS / "jquery-1.9.1.min.js"
 testFrameworks += new TestFramework("utest.runner.Framework")
 
 //add upickle for json parsing
-libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
+//libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
 
 //add "window" for the testing
 jsDependencies += RuntimeDOM

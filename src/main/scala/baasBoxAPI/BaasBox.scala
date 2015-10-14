@@ -2,9 +2,6 @@ package baasBoxAPI
 import scala.scalajs.js
 import js.annotation._
 import scala.scalajs.js.typedarray.ArrayBuffer
-import upickle.Js
-import derive.key
-import upickle.default._
 import scala.annotation.meta.field
 import scala.scalajs.js
 import scala.scalajs.js.JSON
