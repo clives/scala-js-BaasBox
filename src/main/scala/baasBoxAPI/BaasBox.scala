@@ -46,10 +46,19 @@ object BaasBox extends js.Object {
    //
    
    def save( document: js.Object, collectionName: String): Callback[SaveDocumentResponse]= js.native
+   
+   //event.data will contains the object
+   def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object]]= js.native
+   
+   def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse]]= js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])
 
+
+trait CountResponse extends js.Object{
+  val count: Int = js.native;
+}
 
 // response where the data field if of type "DataType". can be  String o more complexe
 // like js.Object as for Documents

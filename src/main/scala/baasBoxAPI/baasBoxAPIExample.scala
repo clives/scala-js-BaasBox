@@ -35,7 +35,25 @@ object Example {
           BaasBox.save(    js.Dynamic.literal("body"->"testbody", "info" -> "testInfo") , "collection1_02").done(
             ( event: SaveDocumentResponse)=>{  
                   js.Dynamic.global.console.log(s"save Done") 
-                  js.Dynamic.global.console.log(s"save Done, version:  ${event.`@version`}, author: ${event._author},") 
+                  js.Dynamic.global.console.log(s"save Done, version:  ${event.`@version`}, author: ${event._author}, id: ${event.id}") 
+                  
+                  
+                  //get back our document:
+                  BaasBox.loadObject("collection1_02", event.id).done(
+                      ( event: GenericResponse[js.Object]) =>{
+                        js.Dynamic.global.console.log(s"we have our document: "+event.data) 
+                      }:Unit
+                  )
+                  
+                  
+                  //check nbr of documents in the collection:
+                  BaasBox.fetchObjectsCount( "collection1_02" ).done(
+                    (response : GenericResponse[CountResponse] ) =>{
+                      js.Dynamic.global.console.log(s" we have ${response.data.count} documents");
+                    }:Unit
+                      )
+                      
+                  
             }:Unit
           )
           
