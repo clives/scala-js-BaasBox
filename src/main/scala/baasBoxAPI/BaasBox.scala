@@ -30,17 +30,32 @@ object BaasBox extends js.Object {
    
    def sendPushNotification(message:js.Object): Callback[IPushResponse]= js.native
    
-   def createCollection(collectionName: String): Callback[GenericResponse] = js.native
    
+   //
+   // Collections
+   //
+   
+   /*  The user calling this API must be the admin or belong to the admin role. */
+   def createCollection(collectionName: String): Callback[GenericResponse[String]] = js.native
+   /*  The user calling this API must be the admin or belong to the admin role. */
    def deleteCollection(collectionName: String): Callback[IPushResponse] = js.native
+   
+   
+   //
+   // Documents
+   //
+   
+   def save( document: js.Object, collectionName: String): Callback[GenericResponse[js.Object]]= js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])
 
 
-trait GenericResponse extends js.Object {
+// response where the data field if of type "DataType". can be  String o more complexe
+// like js.Object as for Documents
+trait GenericResponse[DataType] extends js.Object {
   val result: String= js.native;
-  val data: String= js.native;
+  val data: DataType= js.native;
   val http_code: Int= js.native;
 }
 

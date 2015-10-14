@@ -28,17 +28,26 @@ object Example {
     val response=BaasBox.login("admin", "admin")
 
     response.done(( event: LoginResponse) => {
-          js.Dynamic.global.console.log(s"Done : ${event.username}  ${event.token}")    
+          js.Dynamic.global.console.log(s"Loggin Done : ${event.username}  ${event.token}")    
+          
+          
+          //Documents
+          BaasBox.save(    js.Dynamic.literal("body"->"testbody", "info" -> "testInfo") , "collection1_02").done(
+            ( event: GenericResponse[js.Object])=>{  
+                  js.Dynamic.global.console.log(s"save Done : ${event.result}") 
+            }:Unit
+          )
+          
           
 //          BaasBox.fetchCurrentUser().done( (event: OneUser) =>{
 //            js.Dynamic.global.console.log(s"Done : ${event.data.infoUser.name}") 
 //          }:Unit);
           
           
-          BaasBox.createCollection( "collection1_02").done(( event: GenericResponse) =>{ 
+          BaasBox.createCollection( "collection1_02").done(( event: GenericResponse[String]) =>{ 
             js.Dynamic.global.console.log(s"Done : ${event.result}") 
             
-          }:Unit).fail( (event: GenericResponse) =>{ 
+          }:Unit).fail( (event: GenericResponse[String]) =>{ 
             js.Dynamic.global.console.log(s"Fail : ${event.result}") 
             
           }:Unit)
