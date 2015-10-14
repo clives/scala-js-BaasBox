@@ -28,8 +28,36 @@ val tests = TestSuite {
     BaasBox.setEndPoint("http://localhost:9000")
     BaasBox.appcode = "1234567890";
     
-    val response=BaasBox.login("admin", "admin").toFuture()
+    val loginFuture=BaasBox.login("admin", "admin").toFuture()
 
+    
+    'CreateCollection{
+      loginFuture.flatMap{ _ =>
+        BaasBox.createCollection("collection_"+System.currentTimeMillis())
+      }
+    }
+    
+    /*
+     * could fail, BaasBox error:
+     * OTimeoutException: Timeout on acquiring exclusive lock against
+     */
+    'CreateAndDeleteCollection{
+      loginFuture.flatMap{ _ =>
+        val name="collection_del_"+System.currentTimeMillis()
+        BaasBox.createCollection(name).flatMap{ _ => BaasBox.fetchCurrentUser()}flatMap { _=>
+          
+          var i=0;
+          while( i<10000) i+=1
+          
+          val response=BaasBox.deleteCollection(name).toFuture()
+          response.onFailure{ 
+            case ThrowableWithErrorMsg(data) => println("Failure --CreateAndDeleteCollection-"+data.asInstanceOf[ErrorResponse].responseText)
+            assert(true)
+          }
+          response
+        }
+      }
+    }
     
     'SignupFail{
      BaasBox.signup("admin", "admin").map{ x => throw new nonError()}.recover{ 
@@ -51,7 +79,7 @@ val tests = TestSuite {
       }
     }
     
-    response
+    loginFuture
   }
   
   "testLogin" - {
