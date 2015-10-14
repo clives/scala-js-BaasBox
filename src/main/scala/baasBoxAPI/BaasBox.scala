@@ -21,7 +21,7 @@ object BaasBoxTools{
   /*
    * Permits to change a Callback[A] to a Future[A] ( map/flatMap => permits the use of for....) 
    */
-  implicit def callBackToFutur[A,B]( ourcallback: Callback[A, B]) ={
+  implicit def callBackToFuture[A,B]( ourcallback: Callback[A, B]):Future[A] ={
     val promise =Promise[A];
     
     val a:Callback[A, B]=ourcallback.done( (event:A) => { promise.complete(Success(event)) }:Unit )
