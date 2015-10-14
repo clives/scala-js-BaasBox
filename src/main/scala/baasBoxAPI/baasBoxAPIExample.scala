@@ -50,7 +50,7 @@ object Example {
                   
                   //check nbr of documents in the collection:
                   BaasBox.fetchObjectsCount( "collection1_02" ).done(
-                    (response : GenericResponse[CountResponse] ) =>{
+                    (response : DataCount ) =>{
                       g.console.log(s" we have ${response.data.count} documents");
                     }:Unit
                       )

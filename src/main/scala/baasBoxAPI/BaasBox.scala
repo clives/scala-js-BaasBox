@@ -15,6 +15,8 @@ object BaasBoxTools{
   implicit def PushMessageToString( pushmsg: PushMessage):js.Object={    
       js.Dynamic.literal("message"->pushmsg.message, "users" -> pushmsg.users.toJSArray)
    }
+  
+  type DataCount = GenericResponse[CountResponse]
 }
 
 @JSName("BaasBox")
@@ -73,7 +75,6 @@ trait GenericResponse[DataType] extends js.Object {
   val data: DataType= js.native;
   val http_code: Int= js.native;
 }
-
 
 
 trait SaveDocumentResponse extends js.Object{
