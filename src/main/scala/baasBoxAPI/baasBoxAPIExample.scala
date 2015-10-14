@@ -12,6 +12,7 @@ import scala.util.Random
 import BaasBoxTools._
 import scala.scalajs.js
 import js.Dynamic.{ global => g }
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 @JSExport
 object Example {
@@ -49,11 +50,10 @@ object Example {
                   
                   
                   //check nbr of documents in the collection:
-                  BaasBox.fetchObjectsCount( "collection1_02" ).done(
-                    (response : DataCount ) =>{
-                      g.console.log(s" we have ${response.data.count} documents");
-                    }:Unit
-                      )
+                  val fetchOperation=BaasBox.fetchObjectsCount( "collection1_02" ).toFuture()
+                  
+                  fetchOperation.map{ result => g.console.log(s"Future -  we have ${result.data.count} documents") }
+                    
                       
                   BaasBox.updateObject(event.id, "collection1_02",js.Dynamic.literal("body"->"testbody---", "info" -> "testInfo--") )
                   

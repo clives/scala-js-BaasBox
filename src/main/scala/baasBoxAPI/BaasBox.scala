@@ -9,6 +9,10 @@ import scala.annotation.meta.field
 import scala.scalajs.js
 import scala.scalajs.js.JSON
 import js.JSConverters._
+import scala.concurrent.{Future, Promise}
+import scala.util.{Try, Success, Failure}
+import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+
 
 object BaasBoxTools{
   //Coud not use PushMessage directly was giving me { message$x1 : "value" }
@@ -16,8 +20,36 @@ object BaasBoxTools{
       js.Dynamic.literal("message"->pushmsg.message, "users" -> pushmsg.users.toJSArray)
    }
   
+  
+  /*
+   * Permits to change a Callback[A] to a Future[A] ( map/flatMap => permits the use of for....) 
+   */
+  implicit def callBackToFutur[A]( ourcallback: Callback[A]) ={
+    val promise =Promise[A];
+    
+    val a:Callback[A]=ourcallback.done( (event:A) => { promise.complete(Success(event)) }:Unit )
+    
+    val b:Callback[A]= ourcallback.fail( (event:A) => { promise.complete(Failure(new ThrowableWithErrorMsg(event))) }:Unit )
+    promise.future
+  }
+
+  // add the fonction toFuture() =>  ourCallbacl.toFuture() to get our future
+  implicit def addFunctionToFuture[A]( ourcallback: Callback[A]) = new{
+    def toFuture():Future[A]={ ourcallback }
+  }
+  
+  
   type DataCount = GenericResponse[CountResponse]
 }
+
+/*
+ * Used for the future transformation of the done/fail.
+ * insert the error msg into a Throwable
+ */
+class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
+  
+}
+
 
 @JSName("BaasBox")
 object BaasBox extends js.Object {
