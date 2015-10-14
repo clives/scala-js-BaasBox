@@ -10,6 +10,8 @@ import scala.scalajs.js.annotation.JSExport
 import scala.scalajs.js.Any.fromFunction1
 import scala.util.Random
 import BaasBoxTools._
+import scala.scalajs.js
+import js.Dynamic.{ global => g }
 
 @JSExport
 object Example {
@@ -49,11 +51,14 @@ object Example {
                   //check nbr of documents in the collection:
                   BaasBox.fetchObjectsCount( "collection1_02" ).done(
                     (response : GenericResponse[CountResponse] ) =>{
-                      js.Dynamic.global.console.log(s" we have ${response.data.count} documents");
+                      g.console.log(s" we have ${response.data.count} documents");
                     }:Unit
                       )
                       
                   BaasBox.updateObject(event.id, "collection1_02",js.Dynamic.literal("body"->"testbody---", "info" -> "testInfo--") )
+                  
+                  g.console.log(s"About to update field on id: ${event.id}")
+                  BaasBox.updateField(event.id, "collection1_02", "newField", "test_update")
             }:Unit
           )
           

@@ -46,13 +46,15 @@ object BaasBox extends js.Object {
    //
    
    def save( document: js.Object, collectionName: String): Callback[SaveDocumentResponse]= js.native
-   
+      
    def updateObject( id: String ,  collectionName: String ,document: js.Object): Callback[SaveDocumentResponse]= js.native
    
    //event.data will contains the object
    def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object]]= js.native
    
    def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse]]= js.native
+   
+   def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse] = js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])
