@@ -7,9 +7,10 @@ import utest.asserts.{RetryInterval, RetryMax}
 import utest.ExecutionContext.RunNow
 import baasBoxAPI._
 import baasBoxAPI.BaasBoxTools._
+import scala.util.{Success, Failure}
 
 
-
+class nonError extends Throwable;
 /*
  * Note: the future have to be the last command in "block"
  */
@@ -29,6 +30,14 @@ val tests = TestSuite {
     
     val response=BaasBox.login("admin", "admin").toFuture()
 
+    
+    'SignupFail{
+     BaasBox.signup("admin", "admin").map{ x => throw new nonError()}.recover{ 
+       case x => if(x.isInstanceOf[nonError] ) assert(false) else println("error:"+x);"KO"
+       
+     }
+    }
+    
     'Signup {
       
       BaasBox.fetchUsers().flatMap{ users=>
@@ -64,10 +73,10 @@ val tests = TestSuite {
 }
 
 tests.runAsync().map {    results =>
-  assert(results.toSeq(0).value.isSuccess) // root
-  assert(results.toSeq(1).value.isSuccess) // testSuccess
-  assert(results.toSeq(2).value.isSuccess) // testFail
-  assert(results.toSeq(3).value.isSuccess) // normalSuccess
+  assert(results.toSeq(0).value.isFailure) // root
+  assert(results.toSeq(1).value.isFailure) // testSuccess
+  assert(results.toSeq(2).value.isFailure) // testFail
+  assert(results.toSeq(3).value.isFailure) // normalSuccess
 }
 
 }
