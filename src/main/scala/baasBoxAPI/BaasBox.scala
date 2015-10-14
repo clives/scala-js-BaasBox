@@ -55,6 +55,8 @@ object BaasBox extends js.Object {
    def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse]]= js.native
    
    def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse] = js.native
+   
+   def deleteObject(id:String, collectionName: String): Callback[GenericResponse[String]] = js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])

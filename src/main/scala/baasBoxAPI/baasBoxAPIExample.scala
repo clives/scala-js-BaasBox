@@ -58,7 +58,13 @@ object Example {
                   BaasBox.updateObject(event.id, "collection1_02",js.Dynamic.literal("body"->"testbody---", "info" -> "testInfo--") )
                   
                   g.console.log(s"About to update field on id: ${event.id}")
-                  BaasBox.updateField(event.id, "collection1_02", "newField", "test_update")
+                  BaasBox.updateField(event.id, "collection1_02", "newField", "test_update").done( ( event: SaveDocumentResponse) =>{
+                    g.console.log(s"About to delete document:  ${event.id}")
+                    BaasBox.deleteObject(event.id, "collection1_02")
+                  }:Unit
+                  )
+                  
+                  
             }:Unit
           )
           
