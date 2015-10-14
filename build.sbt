@@ -29,6 +29,11 @@ jsDependencies += ProvidedJS / "baasbox.js"
 
 jsDependencies += ProvidedJS / "jquery-1.9.1.min.js"
 
+//select https://github.com/cgta/otest for the testing
 testFrameworks := Seq(new TestFramework("cgta.otest.runner.OtestSbtFramework"))
 
+//add upickle for json parsing
 libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
+
+//add "window" for the testing
+jsDependencies += RuntimeDOM
