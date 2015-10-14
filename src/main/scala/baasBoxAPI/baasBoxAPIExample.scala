@@ -78,7 +78,7 @@ object Example {
             js.Dynamic.global.console.log(s"Done : ${event.result}") 
             
           }:Unit).fail( (event: ErrorResponse) =>{ 
-            js.Dynamic.global.console.log(s"Fail : ${event.result}") 
+            js.Dynamic.global.console.log(s"Fail : ${event.responseText}") 
             
           }:Unit)
           

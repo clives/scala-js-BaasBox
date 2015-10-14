@@ -8,19 +8,41 @@ import utest.ExecutionContext.RunNow
 import baasBoxAPI._
 import baasBoxAPI.BaasBoxTools._
 
+
+
+/*
+ * Note: the future have to be the last command in "block"
+ */
 object Parallel extends TestSuite{
+  
+  def uniqueName( actualValue: List[String]):String={
+    val newname = s"user_test_${Random.alphanumeric take 10 mkString("")}"
+    if( ! actualValue.contains(newname) ) newname
+    else uniqueName(actualValue);
+  }  
+  
 val tests = TestSuite {
   
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
     BaasBox.appcode = "1234567890";
     
-//    val response=BaasBox.login("admin", "admin").toFuture()
-//    response.onFailure{ case error => assert(false) }
+    val response=BaasBox.login("admin", "admin").toFuture()
 
-    BaasBox.login("admin", "adminggg").onFailure{ case error => assert(false) }
-    BaasBox.login("admin", "adminggg").onComplete { x => assert(false) }
-    BaasBox.login("admin", "admin").toFuture()
+    'Signup {
+      
+      BaasBox.fetchUsers().flatMap{ users=>
+        val f=BaasBox.signup(uniqueName(users.data.toList.map(_.infoUser.name)), "test").toFuture()
+  
+        f.onFailure{
+          case ThrowableWithErrorMsg(data) => println("Failure"+data.asInstanceOf[ErrorResponse].responseText)
+          assert(false)
+        }
+        f
+      }
+    }
+    
+    response
   }
   
   "testLogin" - {

@@ -29,7 +29,7 @@ object BaasBoxTools{
     
     val a:Callback[A, B]=ourcallback.done( (event:A) => { promise.complete(Success(event)) }:Unit )
     
-    val b:Callback[A, B]= ourcallback.fail( (event:B) => { promise.complete(Failure(new ThrowableWithErrorMsg(event))) }:Unit )
+    val b:Callback[A, B]= ourcallback.fail( (event:B) => { promise.complete(Failure(new ThrowableWithErrorMsg[B](event))) }:Unit )
     promise.future
   }
 
@@ -46,7 +46,7 @@ object BaasBoxTools{
  * Used for the future transformation of the done/fail.
  * insert the error msg into a Throwable
  */
-class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
+case class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
   
 }
 
@@ -55,8 +55,8 @@ class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
 object BaasBox extends js.Object {
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
-   def login(name:String, password: String ) : Callback[LoginResponse, js.Object]  = js.native     
-   def signup( username: String, password: String, additionalFields:AdditionalFields= AdditionalFields() ):String = js.native     
+   def login(name:String, password: String ) : Callback[LoginResponse, ErrorResponse]  = js.native     
+   def signup( username: String, password: String, additionalFields:AdditionalFields= AdditionalFields() ):Callback[LoginResponse, ErrorResponse] = js.native     
                
                
    def fetchUsers(): Callback[Users, ErrorResponse] = js.native 
@@ -187,14 +187,10 @@ trait LoginResponse extends js.Object {
 }
  */
 trait ErrorResponse extends js.Object {
-  val result:String= js.native
-  val bb_code:Option[Int]= js.native
-  val message: String= js.native
-  val resource: String= js.native
-  val method: String= js.native
-  val request_header: String= js.native
-  val API_version: String = js.native
-  
+  val readyState:Int= js.native
+  val responseText:String= js.native
+  val status: Int = js.native
+  val statusText: String = js.native  
 }
 //case class LoginResponse( result:String, http_code: Int);// "data":{"user":{"name":"admin","roles":[{"name":"administrator","isrole":true}],"status":"ACTIVE"},"signUpDate":"2015-10-12T20:45:46.166-0300","X-BB-SESSION":"2e0f7c19-33b0-48d5-ad9b-a75e8021565e"},"http_code":200}
 
