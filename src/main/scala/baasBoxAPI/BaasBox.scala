@@ -24,17 +24,17 @@ object BaasBoxTools{
   /*
    * Permits to change a Callback[A] to a Future[A] ( map/flatMap => permits the use of for....) 
    */
-  implicit def callBackToFutur[A]( ourcallback: Callback[A]) ={
+  implicit def callBackToFutur[A,B]( ourcallback: Callback[A, B]) ={
     val promise =Promise[A];
     
-    val a:Callback[A]=ourcallback.done( (event:A) => { promise.complete(Success(event)) }:Unit )
+    val a:Callback[A, B]=ourcallback.done( (event:A) => { promise.complete(Success(event)) }:Unit )
     
-    val b:Callback[A]= ourcallback.fail( (event:A) => { promise.complete(Failure(new ThrowableWithErrorMsg(event))) }:Unit )
+    val b:Callback[A, B]= ourcallback.fail( (event:B) => { promise.complete(Failure(new ThrowableWithErrorMsg(event))) }:Unit )
     promise.future
   }
 
   // add the fonction toFuture() =>  ourCallbacl.toFuture() to get our future
-  implicit def addFunctionToFuture[A]( ourcallback: Callback[A]) = new{
+  implicit def addFunctionToFuture[A,B]( ourcallback: Callback[A, B]) = new{
     def toFuture():Future[A]={ ourcallback }
   }
   
@@ -55,14 +55,14 @@ class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
 object BaasBox extends js.Object {
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
-   def login(name:String, password: String ) : Callback[LoginResponse]  = js.native     
+   def login(name:String, password: String ) : Callback[LoginResponse, js.Object]  = js.native     
    def signup( username: String, password: String, additionalFields:AdditionalFields= AdditionalFields() ):String = js.native     
                
                
-   def fetchUsers(): Callback[Users] = js.native 
-   def fetchCurrentUser(): Callback[User] = js.native
+   def fetchUsers(): Callback[Users, ErrorResponse] = js.native 
+   def fetchCurrentUser(): Callback[User, ErrorResponse] = js.native
    
-   def sendPushNotification(message:js.Object): Callback[IPushResponse]= js.native
+   def sendPushNotification(message:js.Object): Callback[IPushResponse, ErrorResponse]= js.native
    
    
    //
@@ -70,27 +70,27 @@ object BaasBox extends js.Object {
    //
    
    /*  The user calling this API must be the admin or belong to the admin role. */
-   def createCollection(collectionName: String): Callback[GenericResponse[String]] = js.native
+   def createCollection(collectionName: String): Callback[GenericResponse[String], ErrorResponse] = js.native
    /*  The user calling this API must be the admin or belong to the admin role. */
-   def deleteCollection(collectionName: String): Callback[IPushResponse] = js.native
+   def deleteCollection(collectionName: String): Callback[IPushResponse, ErrorResponse] = js.native
    
    
    //
    // Documents
    //
    
-   def save( document: js.Object, collectionName: String): Callback[SaveDocumentResponse]= js.native
+   def save( document: js.Object, collectionName: String): Callback[SaveDocumentResponse, ErrorResponse]= js.native
       
-   def updateObject( id: String ,  collectionName: String ,document: js.Object): Callback[SaveDocumentResponse]= js.native
+   def updateObject( id: String ,  collectionName: String ,document: js.Object): Callback[SaveDocumentResponse, ErrorResponse]= js.native
    
    //event.data will contains the object
-   def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object]]= js.native
+   def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object], ErrorResponse]= js.native
    
-   def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse]]= js.native
+   def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse], ErrorResponse]= js.native
    
-   def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse] = js.native
+   def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
-   def deleteObject(id:String, collectionName: String): Callback[GenericResponse[String]] = js.native
+   def deleteObject(id:String, collectionName: String): Callback[GenericResponse[String], ErrorResponse] = js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])
@@ -125,9 +125,9 @@ case class IPushResponse( val result: String, val data: String, val http_code: S
 case class AdditionalFields(visibleByTheUser: js.Object= new js.Object, 
     visibleByRegisteredUsers: js.Object= new js.Object, visibleByAnonymousUsers: js.Object= new js.Object  ) 
 
-trait Callback[ReturType] extends js.Object{
-  def done(f:js.Function1[ReturType, Unit]):Callback[ReturType]= js.native
-  def fail(f:js.Function1[ReturType, Unit]):Callback[ReturType]= js.native  
+trait Callback[ReturType, ErrorType] extends js.Object{
+  def done(f:js.Function1[ReturType, Unit]):Callback[ReturType, ErrorType]= js.native
+  def fail(f:js.Function1[ErrorType, Unit]):Callback[ReturType, ErrorType]= js.native  
 }    
     
 trait IUser extends js.Object {
@@ -173,6 +173,28 @@ trait LoginResponse extends js.Object {
   val undefinedvisibleByFriends: String= js.native
   val undefinedvisibleByRegisteredUsers: String= js.native
   val undefinedvisibleByTheUser: String= js.native  
+}
+
+/*
+ * {
+    "result": "error",
+    "bb_code": <custom error code, if necessary>,
+    "message": "a message explaining the problem in plain English",
+    "resource": "the REST API called",
+    "method": "the HTTP method used",
+    "request_header": { ... the headers received by the server... },
+    "API_version": "...the BaasBox API version..."
+}
+ */
+trait ErrorResponse extends js.Object {
+  val result:String= js.native
+  val bb_code:Option[Int]= js.native
+  val message: String= js.native
+  val resource: String= js.native
+  val method: String= js.native
+  val request_header: String= js.native
+  val API_version: String = js.native
+  
 }
 //case class LoginResponse( result:String, http_code: Int);// "data":{"user":{"name":"admin","roles":[{"name":"administrator","isrole":true}],"status":"ACTIVE"},"signUpDate":"2015-10-12T20:45:46.166-0300","X-BB-SESSION":"2e0f7c19-33b0-48d5-ad9b-a75e8021565e"},"http_code":200}
 

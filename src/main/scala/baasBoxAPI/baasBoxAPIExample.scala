@@ -77,7 +77,7 @@ object Example {
           BaasBox.createCollection( "collection1_02").done(( event: GenericResponse[String]) =>{ 
             js.Dynamic.global.console.log(s"Done : ${event.result}") 
             
-          }:Unit).fail( (event: GenericResponse[String]) =>{ 
+          }:Unit).fail( (event: ErrorResponse) =>{ 
             js.Dynamic.global.console.log(s"Fail : ${event.result}") 
             
           }:Unit)
@@ -102,8 +102,8 @@ object Example {
           }:Unit);                   
         }:Unit)
         
-     response.fail(( event: LoginResponse) => {
-          js.Dynamic.global.console.log(s"Loggin Fail : ${event.username}")    
+     response.fail(( event:  js.Object) => {
+          js.Dynamic.global.console.log(s"Loggin Fail bb_code: ${event}")    
         }:Unit)
 }
 }

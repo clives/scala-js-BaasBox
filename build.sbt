@@ -23,6 +23,8 @@ libraryDependencies ++= Seq(
     "com.lihaoyi" %%% "utest" % "0.3.0" % "test"
 )
 
+postLinkJSEnv := PhantomJSEnv().value
+
 libraryDependencies += "biz.cgta" %%%! "otest-sjs" % "0.2.1" % "test"
 
 jsDependencies += ProvidedJS / "baasbox.js"
@@ -37,3 +39,5 @@ libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
 
 //add "window" for the testing
 jsDependencies += RuntimeDOM
+
+scalaJSStage in Test := FastOptStage
