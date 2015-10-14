@@ -45,7 +45,7 @@ object BaasBox extends js.Object {
    // Documents
    //
    
-   def save( document: js.Object, collectionName: String): Callback[GenericResponse[js.Object]]= js.native
+   def save( document: js.Object, collectionName: String): Callback[SaveDocumentResponse]= js.native
 }
 
 case class PushMessage( val message:String, val users: List[String])
@@ -57,6 +57,17 @@ trait GenericResponse[DataType] extends js.Object {
   val result: String= js.native;
   val data: DataType= js.native;
   val http_code: Int= js.native;
+}
+
+
+
+trait SaveDocumentResponse extends js.Object{
+     val `@rid` : String= js.native;
+     val `@version`: Int= js.native;
+     val `@class`: String= js.native;
+     val id:String= js.native;
+     val _creation_date: String= js.native;
+     val `_author`: String= js.native;     
 }
 
 @JSExportAll

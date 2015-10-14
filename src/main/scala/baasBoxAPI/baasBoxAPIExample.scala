@@ -33,8 +33,9 @@ object Example {
           
           //Documents
           BaasBox.save(    js.Dynamic.literal("body"->"testbody", "info" -> "testInfo") , "collection1_02").done(
-            ( event: GenericResponse[js.Object])=>{  
-                  js.Dynamic.global.console.log(s"save Done : ${event.result}") 
+            ( event: SaveDocumentResponse)=>{  
+                  js.Dynamic.global.console.log(s"save Done") 
+                  js.Dynamic.global.console.log(s"save Done, version:  ${event.`@version`}, author: ${event._author},") 
             }:Unit
           )
           
