@@ -53,7 +53,7 @@ object Example {
                     }:Unit
                       )
                       
-                  
+                  BaasBox.updateObject(event.id, "collection1_02",js.Dynamic.literal("body"->"testbody---", "info" -> "testInfo--") )
             }:Unit
           )
           
