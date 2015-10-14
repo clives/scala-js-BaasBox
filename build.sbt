@@ -32,7 +32,10 @@ jsDependencies += ProvidedJS / "baasbox.js"
 jsDependencies += ProvidedJS / "jquery-1.9.1.min.js"
 
 //select https://github.com/cgta/otest for the testing
-testFrameworks := Seq(new TestFramework("cgta.otest.runner.OtestSbtFramework"))
+//testFrameworks := Seq(new TestFramework("cgta.otest.runner.OtestSbtFramework"))
+
+//select utest
+testFrameworks += new TestFramework("utest.runner.Framework")
 
 //add upickle for json parsing
 libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
