@@ -363,6 +363,12 @@ var BaasBox = (function() {
         });
       },
 
+	  //SOCIAL
+
+	  retrieveAllSocialNetworkConnections: function () {
+        $.get(BaasBox.endPoint + '/social'+"?X-BB-SESSION=" + BaasBox.getCurrentUser().token)
+      },
+
       revokeRoleAccessToObject: function (collection, objectId, permission, role) {
         return $.ajax({
             url: BaasBox.endPoint + '/document/' + collection + '/' + objectId + '/' + permission + '/role/' + role,
