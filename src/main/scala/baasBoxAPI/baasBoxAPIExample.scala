@@ -15,6 +15,7 @@ import js.Dynamic.{ global => g }
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.HTMLFormElement
+import scala.annotation.meta.field
 
 @JSExport
 object Example {
@@ -35,6 +36,10 @@ object Example {
     }.onFailure{ case x => g.console.log("fail upload")}
   }
   
+  trait simpleDocument extends js.Object{
+    val msg: String =js.native
+  }
+  
   @JSExport
   def main(): Unit = {
     BaasBox.setEndPoint("http://localhost:9000")
@@ -52,6 +57,11 @@ object Example {
           // File
           //
           
+          val ID_OBJECT ="e53d8709-e1ac-4eac-a77b-e832bf2a536e"
+          BaasBox.loadObject[simpleDocument]( "utest_collection", ID_OBJECT).map{
+          objectdata =>             
+            objectdata.data
+        }
           
           
 //           val formatData=new org.scalajs.dom.FormData()

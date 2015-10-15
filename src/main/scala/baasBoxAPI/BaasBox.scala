@@ -96,7 +96,7 @@ object BaasBox extends js.Object {
    def updateObject( id: String ,  collectionName: String ,document: js.Object): Callback[SaveDocumentResponse, ErrorResponse]= js.native
    
    //event.data will contains the object
-   def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object], ErrorResponse]= js.native
+   def loadObject[A]( collectionName: String, id: String): Callback[GenericResponse[A], ErrorResponse]= js.native
    
    def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse], ErrorResponse]= js.native
    

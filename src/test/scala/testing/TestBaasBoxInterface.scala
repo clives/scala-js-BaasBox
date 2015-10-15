@@ -14,6 +14,9 @@ import scala.concurrent.{Future, Promise}
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.HTMLFormElement
 import js.JSConverters._
+import scala.scalajs.js.JSON
+import js.annotation._
+import scala.annotation.meta.field
 
 class nonError extends Throwable;
 /*
@@ -24,7 +27,11 @@ class nonError extends Throwable;
  */
 object Parallel extends TestSuite{
   
-  case class simpleDocument( val msg: String)
+  case class simpleDocument( @(JSExport @field)("msg")  msg: String)
+  
+  trait simpleDocumentResponse extends js.Object{
+    val msg: String =js.native
+  }
   
   def uniqueName( actualValue: List[String]):String={
     val newname = s"user_test_${Random.alphanumeric take 10 mkString("")}"
@@ -38,7 +45,7 @@ val tests = TestSuite {
   val ID_FILE2="85fe1cb2-72a0-4ab9-9ba4-63961ca20a9f"
   val ID_FILE3="5e586f08-8d19-4d78-ada5-dfacd5523465"
   val COLLECTION="utest_collection"
-  val ID_OBJECT ="e8e82da7-cdc6-4e17-9746-1ce382c146e2"
+  val ID_OBJECT ="e53d8709-e1ac-4eac-a77b-e832bf2a536e"
   
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
@@ -55,6 +62,13 @@ val tests = TestSuite {
       
       'updateObject{
         BaasBox.updateObject( ID_OBJECT,  COLLECTION ,simpleDocument("testUpdated").asInstanceOf[js.Object])
+      }
+      
+      'loadObject{
+        BaasBox.loadObject[simpleDocumentResponse]( COLLECTION, ID_OBJECT).map{
+          objectdata => 
+            objectdata.data
+        }
       }
     }
     
