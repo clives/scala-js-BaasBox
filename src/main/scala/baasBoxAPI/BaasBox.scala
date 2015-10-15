@@ -56,6 +56,7 @@ object BaasBox extends js.Object {
    // 
    val READ_PERMISSION: String= js.native
    val UPDATE_PERMISSION: String = js.native
+   val REGISTERED_ROLE: String = js.native
   
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
@@ -110,6 +111,10 @@ object BaasBox extends js.Object {
    def fetchFileDetails(id:String ) : Callback[GenericResponse[SaveDocumentResponse], ErrorResponse] = js.native
    
    def grantUserAccessToFile(fileId:String, permission:String, username:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
+   def revokeUserAccessToFile(fileId:String, permission:String, username:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
+   def grantRoleAccessToFile(fileId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
 }
 
 

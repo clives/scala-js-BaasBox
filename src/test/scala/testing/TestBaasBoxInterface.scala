@@ -19,7 +19,7 @@ class nonError extends Throwable;
  * Note: the future have to be the last command in "block"
  * 
  * requiere : user: test_user
- *            file: valid ID_FILE
+ *            file: valid ID_FILE and ID_FILE2
  */
 object Parallel extends TestSuite{
   
@@ -32,6 +32,7 @@ object Parallel extends TestSuite{
 val tests = TestSuite {
   
   val ID_FILE="07dcf634-68df-4969-afa5-a5b932ecc5fd"
+  val ID_FILE2="85fe1cb2-72a0-4ab9-9ba4-63961ca20a9f"
   
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
@@ -51,8 +52,22 @@ val tests = TestSuite {
       }
     }
     
+    'grantRoleAccessToFile{
+      BaasBox.grantRoleAccessToFile( ID_FILE,  BaasBox.READ_PERMISSION,BaasBox.REGISTERED_ROLE ).map{
+        result =>assert( result.http_code == 200)
+      }
+    }
+
+    
+    
+    'revokeUserAccessToFile{
+      BaasBox.revokeUserAccessToFile( ID_FILE, BaasBox.UPDATE_PERMISSION, "test_user").map{
+        result => assert( result.http_code == 200)
+      }
+    }
+    
     'grantUserAccessToFile{
-      BaasBox.grantUserAccessToFile(ID_FILE, BaasBox.READ_PERMISSION, "test_user").map{
+      BaasBox.grantUserAccessToFile(ID_FILE2, BaasBox.READ_PERMISSION, "test_user").map{
         response => response.result
       }
     }
