@@ -34,8 +34,18 @@ val tests = TestSuite {
     
     val loginFuture=BaasBox.login("admin", "admin").toFuture()
 
-    'File{
-     
+    //file with Id: 07dcf634-68df-4969-afa5-a5b932ecc5fd
+    //have to be present on the baasbox
+    'FetchFiles{
+      BaasBox.fetchFile("07dcf634-68df-4969-afa5-a5b932ecc5fd").map { filecontent =>
+        println(s"file: <<${filecontent.take(20)} >>")
+      }
+    }
+    
+    'fetchFileDetails{
+      BaasBox.fetchFileDetails("07dcf634-68df-4969-afa5-a5b932ecc5fd").map { infofile =>
+        println(s"creation date: <<${infofile.data._creation_date} >>")
+      }
     }
     
     'CreateCollection{

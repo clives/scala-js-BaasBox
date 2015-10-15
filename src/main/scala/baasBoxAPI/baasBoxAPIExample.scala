@@ -31,7 +31,7 @@ object Example {
     event.preventDefault()
     val ourformdata=new org.scalajs.dom.FormData(jQuery("#fileinfo").asInstanceOf[js.Array[HTMLFormElement]](0))
     BaasBox.uploadFile(ourformdata).map{
-      x => g.console.log("upload ok")
+      response => g.console.log("upload ok: id:"+response)
     }.onFailure{ case x => g.console.log("fail upload")}
   }
   

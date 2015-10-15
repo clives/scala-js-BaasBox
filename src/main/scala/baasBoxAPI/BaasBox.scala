@@ -50,6 +50,13 @@ case class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwa
 
 @JSName("BaasBox")
 object BaasBox extends js.Object {
+  
+   //
+   // Permission
+   // 
+   val READ_PERMISSION: String= js.native
+   val UPDATE_PERMISSION: String = js.native
+  
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
    def login(name:String, password: String ) : Callback[LoginResponse, ErrorResponse]  = js.native     
@@ -87,13 +94,20 @@ object BaasBox extends js.Object {
    
    def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
-   def deleteObject(id:String, collectionName: String): Callback[GenericResponse[String], ErrorResponse] = js.native
+   def deleteObject(id:String, collectionName: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
    //
    // Files
    //
-   def uploadFile( dataa: org.scalajs.dom.FormData): Callback[SaveDocumentResponse, ErrorResponse] = js.native
+   
+   //return json (String) 
+   def uploadFile( dataa: org.scalajs.dom.FormData): Callback[String, ErrorResponse] = js.native
 
+   def deleteFile(id:String): Callback[GenericResponse[String], ErrorResponse] = js.native
+   
+   def fetchFile(id:String) : Callback[String, ErrorResponse] = js.native
+   
+   def fetchFileDetails(id:String ) : Callback[GenericResponse[SaveDocumentResponse], ErrorResponse] = js.native
 }
 
 
