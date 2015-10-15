@@ -115,6 +115,9 @@ object BaasBox extends js.Object {
    def revokeUserAccessToFile(fileId:String, permission:String, username:String):Callback[GenericResponse[String], ErrorResponse]=js.native
    
    def grantRoleAccessToFile(fileId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
+   def revokeRoleAccessToFile(fileId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
 }
 
 
