@@ -27,7 +27,9 @@ object Example {
   
   @JSExport
   def submitFile( event:org.scalajs.dom.Event ): Unit = {
-    val ourformdata=new org.scalajs.dom.FormData(jQuery("#fileinfo").asInstanceOf[HTMLFormElement])
+    g.console.log("submit file:"+jQuery("#fileinfo").asInstanceOf[HTMLFormElement])
+    event.preventDefault()
+    val ourformdata=new org.scalajs.dom.FormData(jQuery("#fileinfo").asInstanceOf[js.Array[HTMLFormElement]](0))
     BaasBox.uploadFile(ourformdata).map{
       x => g.console.log("upload ok")
     }.onFailure{ case x => g.console.log("fail upload")}
@@ -39,6 +41,8 @@ object Example {
     BaasBox.appcode = "1234567890";
     
     val response=BaasBox.login("admin", "admin")
+    
+    jQuery("#fileinfo").submit( submitFile  _ )
 
     response.done(( event: LoginResponse) => {
           js.Dynamic.global.console.log(s"Loggin Done : ${event.username}  ${event.token}")    
