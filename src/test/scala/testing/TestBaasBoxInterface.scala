@@ -17,6 +17,9 @@ import org.scalajs.dom.raw.HTMLFormElement
 class nonError extends Throwable;
 /*
  * Note: the future have to be the last command in "block"
+ * 
+ * requiere : user: test_user
+ *            file: valid ID_FILE
  */
 object Parallel extends TestSuite{
   
@@ -28,23 +31,29 @@ object Parallel extends TestSuite{
   
 val tests = TestSuite {
   
+  val ID_FILE="07dcf634-68df-4969-afa5-a5b932ecc5fd"
+  
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
     BaasBox.appcode = "1234567890";
     
     val loginFuture=BaasBox.login("admin", "admin").toFuture()
 
-    //file with Id: 07dcf634-68df-4969-afa5-a5b932ecc5fd
-    //have to be present on the baasbox
     'FetchFiles{
-      BaasBox.fetchFile("07dcf634-68df-4969-afa5-a5b932ecc5fd").map { filecontent =>
+      BaasBox.fetchFile(ID_FILE).map { filecontent =>
         println(s"file: <<${filecontent.take(20)} >>")
       }
     }
     
     'fetchFileDetails{
-      BaasBox.fetchFileDetails("07dcf634-68df-4969-afa5-a5b932ecc5fd").map { infofile =>
+      BaasBox.fetchFileDetails(ID_FILE).map { infofile =>
         println(s"creation date: <<${infofile.data._creation_date} >>")
+      }
+    }
+    
+    'grantUserAccessToFile{
+      BaasBox.grantUserAccessToFile(ID_FILE, BaasBox.READ_PERMISSION, "test_user").map{
+        response => response.result
       }
     }
     

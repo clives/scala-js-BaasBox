@@ -108,6 +108,8 @@ object BaasBox extends js.Object {
    def fetchFile(id:String) : Callback[String, ErrorResponse] = js.native
    
    def fetchFileDetails(id:String ) : Callback[GenericResponse[SaveDocumentResponse], ErrorResponse] = js.native
+   
+   def grantUserAccessToFile(fileId:String, permission:String, username:String):Callback[GenericResponse[String], ErrorResponse]=js.native
 }
 
 
