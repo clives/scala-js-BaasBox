@@ -72,7 +72,9 @@ object BaasBox extends js.Object {
                
                
    def fetchUsers(): Callback[Users, ErrorResponse] = js.native 
-   def fetchCurrentUser(): Callback[User, ErrorResponse] = js.native
+   def fetchCurrentUser(): Callback[GenericResponse[UserData], ErrorResponse] = js.native
+   
+   
    
    def sendPushNotification(message:js.Object): Callback[IPushResponse, ErrorResponse]= js.native
    

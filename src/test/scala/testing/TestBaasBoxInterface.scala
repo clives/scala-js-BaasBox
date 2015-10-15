@@ -150,6 +150,18 @@ val tests = TestSuite {
      }
     }
     
+    'fetchUsers{
+      BaasBox.fetchUsers().map{
+        result => result.data.toList
+      }
+    }
+    
+    'fetchCurrentUser{
+      BaasBox.fetchCurrentUser().map{
+        result => result.data.infoUser.name
+      }
+    }
+
 
     
     'SignupWithAdditionalData {
