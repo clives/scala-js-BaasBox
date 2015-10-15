@@ -109,6 +109,16 @@ object BaasBox extends js.Object {
    
    def deleteObject(id:String, collectionName: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
+   
+   //
+   // Friendship and Social API
+   //
+   
+   def followUser(username: String):Callback[GenericResponse[UserData], ErrorResponse] =js.native
+   
+   def fetchFollowers(username: String):  Callback[GenericResponse[js.Array[UserData]], ErrorResponse]= js.native
+   
+   
    //
    // Files
    //
@@ -204,6 +214,11 @@ trait UserData extends js.Object{
 trait User extends js.Object {
   val name: String =js.native;
   val status:String =js.native;
+  val roles: js.Array[Name] =js.native;
+}
+
+trait Name extends js.Object{
+  val name: String = js.native
 }
 
 trait LoginResponse extends js.Object {

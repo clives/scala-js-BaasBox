@@ -46,6 +46,7 @@ val tests = TestSuite {
   val ID_FILE3="5e586f08-8d19-4d78-ada5-dfacd5523465"
   val COLLECTION="utest_collection"
   val ID_OBJECT ="e53d8709-e1ac-4eac-a77b-e832bf2a536e"
+  val TEST_USER="test_user"
   
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
@@ -61,6 +62,16 @@ val tests = TestSuite {
           result => result.http_code
         }
       }
+      
+      
+      'FriendshipFolloUserThenFetch{
+        BaasBox.followUser(TEST_USER).map{ response =>
+          BaasBox.fetchFollowers("admin").map{
+            response => response.data.toList
+          }
+        }
+      }
+
       
       'Save{ 
         BaasBox.save( simpleDocument("test").asInstanceOf[js.Object], COLLECTION)

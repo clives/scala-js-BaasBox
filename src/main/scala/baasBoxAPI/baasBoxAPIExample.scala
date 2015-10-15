@@ -36,6 +36,23 @@ object Example {
     }.onFailure{ case x => g.console.log("fail upload")}
   }
   
+  @JSExport
+  def testFetchFollower():Unit ={
+    g.console.log("click")
+    BaasBox.login("test_user2", "test_user2").map{ _ =>
+    //BaasBox.followUser("test_user").map{ response =>
+      
+          g.console.log("fetch")
+          BaasBox.fetchFollowers("test_user").map{
+            response => 
+              g.console.log("result")
+              response.data.toList.foreach{ value=> g.console.log(value) }
+          }
+     //   }
+    }.onFailure{ case x => g.console.log("Failure")}
+  }
+  
+  
   trait simpleDocument extends js.Object{
     val msg: String =js.native
   }
