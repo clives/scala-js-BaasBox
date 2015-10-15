@@ -27,6 +27,13 @@ object Example {
   }
   
   @JSExport
+  def testResetPassword():Unit={
+     BaasBox.login("test_user", "test_user").map{ _ =>
+      BaasBox.resetPassword();
+     }
+  }
+  
+  @JSExport
   def testUpdateUserProfile():Unit={
     BaasBox.login("test_user", "test_user").map{ _ =>
       BaasBox.updateUserProfile( AdditionalFields( js.Dynamic.literal("email"-> "test@yahoo.com") ))

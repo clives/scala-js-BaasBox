@@ -87,6 +87,8 @@ object BaasBox extends js.Object {
    
    def updateUserProfile(additionalFields:js.Object):Callback[GenericResponse[UserData], ErrorResponse] =js.native
       
+   def resetPassword():Callback[GenericResponse[String], ErrorResponse] =js.native 
+   
       
    //
    // Collections
