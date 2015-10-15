@@ -27,9 +27,15 @@ postLinkJSEnv := PhantomJSEnv().value
 
 libraryDependencies += "biz.cgta" %%%! "otest-sjs" % "0.2.1" % "test"
 
+libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.8.0"
+
+//libraryDependencies += "org.scala-js" % "scalajs-tools_2.11" % "0.6.4"
+
 jsDependencies += ProvidedJS / "baasbox.js"
 
 jsDependencies += ProvidedJS / "jquery-1.9.1.min.js"
+
+libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % "0.8.1"
 
 //select https://github.com/cgta/otest for the testing
 //testFrameworks := Seq(new TestFramework("cgta.otest.runner.OtestSbtFramework"))

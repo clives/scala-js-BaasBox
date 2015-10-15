@@ -88,7 +88,14 @@ object BaasBox extends js.Object {
    def updateField( id: String, collectionName: String, fieldName: String, fieldValue: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
    def deleteObject(id:String, collectionName: String): Callback[GenericResponse[String], ErrorResponse] = js.native
+   
+   //
+   // Files
+   //
+   def uploadFile( dataa: org.scalajs.dom.FormData): Callback[SaveDocumentResponse, ErrorResponse] = js.native
+
 }
+
 
 case class PushMessage( val message:String, val users: List[String])
 

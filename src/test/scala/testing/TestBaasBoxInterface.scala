@@ -11,6 +11,8 @@ import scala.util.{Success, Failure}
 import scala.scalajs.js
 import js.Dynamic.{ global => g }
 import scala.concurrent.{Future, Promise}
+import org.scalajs.jquery.jQuery
+import org.scalajs.dom.raw.HTMLFormElement
 
 class nonError extends Throwable;
 /*
@@ -32,6 +34,9 @@ val tests = TestSuite {
     
     val loginFuture=BaasBox.login("admin", "admin").toFuture()
 
+    'File{
+     
+    }
     
     'CreateCollection{
       loginFuture.flatMap{ _ =>
@@ -106,7 +111,7 @@ tests.runAsync().map {    results =>
   assert(results.toSeq(0).value.isFailure) // root
   assert(results.toSeq(1).value.isFailure) // testSuccess
   assert(results.toSeq(2).value.isFailure) // testFail
-  assert(results.toSeq(3).value.isFailure) // normalSuccess
+  assert(results.toSeq(3).value.isFailure)// normalSuccess
 }
 
 }

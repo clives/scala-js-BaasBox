@@ -13,6 +13,8 @@ import BaasBoxTools._
 import scala.scalajs.js
 import js.Dynamic.{ global => g }
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
+import org.scalajs.jquery.jQuery
+import org.scalajs.dom.raw.HTMLFormElement
 
 @JSExport
 object Example {
@@ -24,6 +26,14 @@ object Example {
   }
   
   @JSExport
+  def submitFile( event:org.scalajs.dom.Event ): Unit = {
+    val ourformdata=new org.scalajs.dom.FormData(jQuery("#fileinfo").asInstanceOf[HTMLFormElement])
+    BaasBox.uploadFile(ourformdata).map{
+      x => g.console.log("upload ok")
+    }.onFailure{ case x => g.console.log("fail upload")}
+  }
+  
+  @JSExport
   def main(): Unit = {
     BaasBox.setEndPoint("http://localhost:9000")
     BaasBox.appcode = "1234567890";
@@ -32,6 +42,19 @@ object Example {
 
     response.done(( event: LoginResponse) => {
           js.Dynamic.global.console.log(s"Loggin Done : ${event.username}  ${event.token}")    
+          
+          
+          //
+          // File
+          //
+          
+          
+          
+//           val formatData=new org.scalajs.dom.FormData()
+//          //formatData.append("fileName", "test.js", "test.js")
+//          formatData.append("test.js", js.Dynamic.literal("body"->"testbody---", "info" -> "testInfo--"), "testScript.js2")
+//          //File:
+//          BaasBox.uploadFile(formatData)
           
           
           //Documents
