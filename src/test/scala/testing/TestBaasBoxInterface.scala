@@ -121,6 +121,12 @@ val tests = TestSuite {
       }
     }
     
+    'loadCollection{
+    
+      BaasBox.loadCollection(COLLECTION).map{
+        result => result.toList.foreach{ value=> println("json:"+JSON.stringify(value) )}
+      }
+    }
     /*
      * could fail, BaasBox error:
      * OTimeoutException: Timeout on acquiring exclusive lock against

@@ -88,6 +88,7 @@ object BaasBox extends js.Object {
    /*  The user calling this API must be the admin or belong to the admin role. */
    def deleteCollection(collectionName: String): Callback[IPushResponse, ErrorResponse] = js.native
    
+   def loadCollection(collectionName: String): Callback[js.Array[js.Object], ErrorResponse]= js.native
    
    //
    // Documents
