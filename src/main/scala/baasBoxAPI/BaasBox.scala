@@ -60,7 +60,14 @@ object BaasBox extends js.Object {
   
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
-   def login(name:String, password: String ) : Callback[LoginResponse, ErrorResponse]  = js.native     
+   
+   
+   //
+   // Login / Signup
+   //
+   
+   def login(name:String, password: String ) : Callback[LoginResponse, ErrorResponse]  = js.native
+   def logout(): Callback[LogoutReponse, ErrorResponse] = js.native
    def signup( username: String, password: String, additionalFields:AdditionalFields= AdditionalFields() ):Callback[LoginResponse, ErrorResponse] = js.native     
                
                
@@ -201,6 +208,11 @@ trait LoginResponse extends js.Object {
   val undefinedvisibleByFriends: String= js.native
   val undefinedvisibleByRegisteredUsers: String= js.native
   val undefinedvisibleByTheUser: String= js.native  
+}
+
+trait LogoutReponse extends js.Object{
+  val data : String= js.native
+  val message: String = js.native
 }
 
 /*

@@ -147,6 +147,11 @@ val tests = TestSuite {
 }
 
 tests.runAsync().map {    results =>
+  
+  BaasBox.logout().map{
+    response => assert ( response.data== "ok")
+  }
+  
   assert(results.toSeq(0).value.isFailure) // root
   assert(results.toSeq(1).value.isFailure) // testSuccess
   assert(results.toSeq(2).value.isFailure) // testFail
