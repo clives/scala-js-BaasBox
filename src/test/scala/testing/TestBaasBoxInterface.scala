@@ -70,6 +70,13 @@ val tests = TestSuite {
             objectdata.data
         }
       }
+      
+      'fetchObjectsCount{
+        BaasBox.fetchObjectsCount( COLLECTION).map{
+          objectdata => 
+            objectdata.data.count
+        }
+      }
     }
     
     'FetchFiles{
@@ -141,6 +148,23 @@ val tests = TestSuite {
        case x => if(x.isInstanceOf[nonError] ) assert(false) else println("error:"+x);"KO"
        
      }
+    }
+    
+
+    
+    'SignupWithAdditionalData {
+      
+      BaasBox.fetchUsers().flatMap{ users=>
+        val name=uniqueName(users.data.toList.map(_.infoUser.name))
+        val f=BaasBox.signup(name,name,
+            AdditionalFields(js.Dynamic.literal("email"-> (name+"@gmail.com")))).toFuture()
+  
+        f.onFailure{
+          case ThrowableWithErrorMsg(data) => println("Failure"+data.asInstanceOf[ErrorResponse].responseText)
+          assert(false)
+        }
+        f
+      }
     }
     
     'Signup {
