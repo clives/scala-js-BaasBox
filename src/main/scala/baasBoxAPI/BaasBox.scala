@@ -12,12 +12,12 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 
 
 object BaasBoxTools{
+  
   //Coud not use PushMessage directly was giving me { message$x1 : "value" }
   implicit def PushMessageToString( pushmsg: PushMessage):js.Object={    
       js.Dynamic.literal("message"->pushmsg.message, "users" -> pushmsg.users.toJSArray)
    }
-    
-    
+     
   implicit def PushMessageToString( fields: AdditionalFields):js.Object={    
       js.Dynamic.literal("visibleByTheUser"->fields.visibleByTheUser, "visibleByRegisteredUsers" -> fields.visibleByRegisteredUsers
           , "visibleByAnonymousUsers" -> fields.visibleByAnonymousUsers)
@@ -62,7 +62,13 @@ object BaasBox extends js.Object {
    val READ_PERMISSION: String= js.native
    val UPDATE_PERMISSION: String = js.native
    val REGISTERED_ROLE: String = js.native
+   val ALL_PERMISSION: String =js.native
   
+   
+   //
+   // Configuration
+   // 
+   
    def setEndPoint(url:String): Unit = js.native
    var appcode : String = js.native 
    
@@ -118,6 +124,9 @@ object BaasBox extends js.Object {
    
    def deleteObject(id:String, collectionName: String): Callback[SaveDocumentResponse, ErrorResponse] = js.native
    
+   def grantRoleAccessToObject(collection: String, objectId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
+   def revokeRoleAccessToObject(collection: String, objectId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
    
    //
    // Friendship and Social API
@@ -264,11 +273,3 @@ trait ErrorResponse extends js.Object {
   val status: Int = js.native
   val statusText: String = js.native  
 }
-//case class LoginResponse( result:String, http_code: Int);// "data":{"user":{"name":"admin","roles":[{"name":"administrator","isrole":true}],"status":"ACTIVE"},"signUpDate":"2015-10-12T20:45:46.166-0300","X-BB-SESSION":"2e0f7c19-33b0-48d5-ad9b-a75e8021565e"},"http_code":200}
-
-
-//object addingConversionJsonToLoginResponse {
-//  implicit def addFunction(ourString:String)=new{ 
-//    def asLoginResponse()={read[LoginResponse](ourString)} 
-//  }
-//}
