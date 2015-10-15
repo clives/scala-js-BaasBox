@@ -27,6 +27,13 @@ object Example {
   }
   
   @JSExport
+  def testUpdateUserProfile():Unit={
+    BaasBox.login("test_user", "test_user").map{ _ =>
+      BaasBox.updateUserProfile( AdditionalFields( js.Dynamic.literal("email"-> "test@yahoo.com") ))
+    }
+  }
+  
+  @JSExport
   def submitFile( event:org.scalajs.dom.Event ): Unit = {
     g.console.log("submit file:"+jQuery("#fileinfo").asInstanceOf[HTMLFormElement])
     event.preventDefault()

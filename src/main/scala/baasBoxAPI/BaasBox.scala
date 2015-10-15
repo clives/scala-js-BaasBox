@@ -16,7 +16,12 @@ object BaasBoxTools{
   implicit def PushMessageToString( pushmsg: PushMessage):js.Object={    
       js.Dynamic.literal("message"->pushmsg.message, "users" -> pushmsg.users.toJSArray)
    }
-  
+    
+    
+  implicit def PushMessageToString( fields: AdditionalFields):js.Object={    
+      js.Dynamic.literal("visibleByTheUser"->fields.visibleByTheUser, "visibleByRegisteredUsers" -> fields.visibleByRegisteredUsers
+          , "visibleByAnonymousUsers" -> fields.visibleByAnonymousUsers)
+   }
   
   /*
    * Permits to change a Callback[A] to a Future[A] ( map/flatMap => permits the use of for....) 
@@ -80,7 +85,9 @@ object BaasBox extends js.Object {
     
    def sendPushNotification(message:js.Object): Callback[IPushResponse, ErrorResponse]= js.native
    
-   
+   def updateUserProfile(additionalFields:js.Object):Callback[GenericResponse[UserData], ErrorResponse] =js.native
+      
+      
    //
    // Collections
    //
@@ -118,6 +125,9 @@ object BaasBox extends js.Object {
    
    def fetchFollowers(username: String):  Callback[GenericResponse[js.Array[UserData]], ErrorResponse]= js.native
    
+   def unfollowUser(username: String):Callback[GenericResponse[String], ErrorResponse] =js.native
+   
+   def fetchFollowing(username: String):  Callback[GenericResponse[js.Array[UserData]], ErrorResponse]= js.native
    
    //
    // Files
