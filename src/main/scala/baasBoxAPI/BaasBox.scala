@@ -67,15 +67,17 @@ object BaasBox extends js.Object {
    //
    
    def login(name:String, password: String ) : Callback[LoginResponse, ErrorResponse]  = js.native
+   
    def logout(): Callback[LogoutReponse, ErrorResponse] = js.native
+   
    def signup( username: String, password: String, additionalFields:AdditionalFields= AdditionalFields() ):Callback[LoginResponse, ErrorResponse] = js.native     
-               
-               
+                             
    def fetchUsers(): Callback[Users, ErrorResponse] = js.native 
+   
    def fetchCurrentUser(): Callback[GenericResponse[UserData], ErrorResponse] = js.native
    
-   
-   
+   def changePassword(oldpassword: String, newpassword: String) : Callback[GenericResponse[String], ErrorResponse] = js.native  
+    
    def sendPushNotification(message:js.Object): Callback[IPushResponse, ErrorResponse]= js.native
    
    

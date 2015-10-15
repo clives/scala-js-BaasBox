@@ -56,6 +56,12 @@ val tests = TestSuite {
     
     'Document{
       
+      'ChangePassword{
+        BaasBox.changePassword("admin", "admin").map{
+          result => result.http_code
+        }
+      }
+      
       'Save{ 
         BaasBox.save( simpleDocument("test").asInstanceOf[js.Object], COLLECTION)
       }
