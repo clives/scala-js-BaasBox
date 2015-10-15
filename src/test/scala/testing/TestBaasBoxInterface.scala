@@ -13,6 +13,7 @@ import js.Dynamic.{ global => g }
 import scala.concurrent.{Future, Promise}
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.HTMLFormElement
+import js.JSConverters._
 
 class nonError extends Throwable;
 /*
@@ -22,6 +23,8 @@ class nonError extends Throwable;
  *            file: valid ID_FILE and ID_FILE2, ID_FILE3
  */
 object Parallel extends TestSuite{
+  
+  case class simpleDocument( val msg: String)
   
   def uniqueName( actualValue: List[String]):String={
     val newname = s"user_test_${Random.alphanumeric take 10 mkString("")}"
@@ -34,6 +37,8 @@ val tests = TestSuite {
   val ID_FILE="07dcf634-68df-4969-afa5-a5b932ecc5fd"
   val ID_FILE2="85fe1cb2-72a0-4ab9-9ba4-63961ca20a9f"
   val ID_FILE3="5e586f08-8d19-4d78-ada5-dfacd5523465"
+  val COLLECTION="utest_collection"
+  val ID_OBJECT ="e8e82da7-cdc6-4e17-9746-1ce382c146e2"
   
   'Loggin {
     BaasBox.setEndPoint("http://localhost:9000")
@@ -41,6 +46,18 @@ val tests = TestSuite {
     
     val loginFuture=BaasBox.login("admin", "admin").toFuture()
 
+    
+    'Document{
+      
+      'Save{ 
+        BaasBox.save( simpleDocument("test").asInstanceOf[js.Object], COLLECTION)
+      }
+      
+      'updateObject{
+        BaasBox.updateObject( ID_OBJECT,  COLLECTION ,simpleDocument("testUpdated").asInstanceOf[js.Object])
+      }
+    }
+    
     'FetchFiles{
       BaasBox.fetchFile(ID_FILE).map { filecontent =>
         println(s"file: <<${filecontent.take(20)} >>")
