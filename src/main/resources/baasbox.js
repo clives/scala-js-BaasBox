@@ -365,8 +365,20 @@ var BaasBox = (function() {
 
 	  //SOCIAL
 
+      loginFacebook: function (params) {
+      return $.ajax({
+          url: BaasBox.endPoint + '/social/facebook',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(params),         
+          cache: false,
+          processData:false       
+        })
+      },  
+       
+        
 	  retrieveAllSocialNetworkConnections: function () {
-        $.get(BaasBox.endPoint + '/social'+"?X-BB-SESSION=" + BaasBox.getCurrentUser().token)
+        $.get(BaasBox.endPoint + '/social/facebook'+"?X-BB-SESSION=" + BaasBox.getCurrentUser().token)
       },
 
       revokeRoleAccessToObject: function (collection, objectId, permission, role) {
