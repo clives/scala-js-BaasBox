@@ -375,6 +375,17 @@ var BaasBox = (function() {
           processData:false       
         })
       },  
+      
+      loginGoogle: function (params) {
+          return $.ajax({
+              url: BaasBox.endPoint + '/social/facebook',
+              type: 'POST',
+              contentType: 'application/json',
+              data: JSON.stringify(params),         
+              cache: false,
+              processData:false       
+            })
+          },  
        
         
 	  retrieveAllSocialNetworkConnections: function () {

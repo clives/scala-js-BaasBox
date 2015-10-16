@@ -16,14 +16,65 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import org.scalajs.jquery.jQuery
 import org.scalajs.dom.raw.HTMLFormElement
 import scala.annotation.meta.field
+import upickle._
+import js.JSConverters._
 
 @JSExport
 object Example {
 
+  
+  //
+  // DAO
+  //
+  case class email( email: String);
+  
+  implicit def writerEmailToJsObject( ourinstance: email): js.Object ={
+    JSON.parse(write[email](ourinstance)).asInstanceOf[js.Object]
+  }
+
+  implicit def readerEmailToJsObject( ourjs:  GenericResponse[js.Object]): email ={
+    
+    g.console.log("Stringify"+JSON.stringify(ourjs.data))
+    
+    read[email](JSON.stringify(ourjs.data))
+  }
+  
+//  implicit def readerEmailToJsObject( ourjs: GenericResponse[js.Object]): email ={
+//    read[email](JSON.stringify(ourjs.data))
+//  }
+  // ---
+  
+  
   def uniqueName( actualValue: List[String]):String={
     val newname = s"user_test_${Random.alphanumeric take 10 mkString("")}"
     if( ! actualValue.contains(newname) ) newname
     else uniqueName(actualValue);
+  }
+  
+  @JSExport
+  def testInsertDocument():Unit={
+    BaasBox.login("test_user", "test_user").map{
+      _ => BaasBox.save( email("test@yahoo.com"), "utest_collection").map{
+        response => 
+          g.console.log("Our Object id:"+response.id)
+          
+          BaasBox.loadObject("utest_collection", response.id).map{
+            ourresponse =>
+              val ourmail: email= ourresponse
+              g.console.log("our email:"+ourmail);
+          }.onFailure{ case x =>
+            g.console.log("Fail");
+            g.console.log(x.toString)
+          }
+      }
+    }
+  }
+  
+  @JSExport
+  def testLoginFacebook():Unit={
+    BaasBox.loginFacebook( AuthenticationSocialNetwork("token", "token")).map{
+     result=> g.console.log(result.http_code)
+    }
   }
   
   @JSExport
@@ -89,7 +140,7 @@ object Example {
           //
           
           val ID_OBJECT ="e53d8709-e1ac-4eac-a77b-e832bf2a536e"
-          BaasBox.loadObject[simpleDocument]( "utest_collection", ID_OBJECT).map{
+          BaasBox.loadObject( "utest_collection", ID_OBJECT).map{
           objectdata =>             
             objectdata.data
         }

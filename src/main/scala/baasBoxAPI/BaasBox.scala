@@ -9,16 +9,17 @@ import js.JSConverters._
 import scala.concurrent.{Future, Promise}
 import scala.util.{Try, Success, Failure}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
-
+import upickle._
+import js.Dynamic.{ global => g }
 
 object BaasBoxTools{
   
   //Coud not use PushMessage directly was giving me { message$x1 : "value" }
-  implicit def PushMessageToString( pushmsg: PushMessage):js.Object={    
+  implicit def PushMessageToJsObject( pushmsg: PushMessage):js.Object={    
       js.Dynamic.literal("message"->pushmsg.message, "users" -> pushmsg.users.toJSArray)
    }
      
-  implicit def PushMessageToString( fields: AdditionalFields):js.Object={    
+  implicit def AdditionalFieldsToJsObject( fields: AdditionalFields):js.Object={    
       js.Dynamic.literal("visibleByTheUser"->fields.visibleByTheUser, "visibleByRegisteredUsers" -> fields.visibleByRegisteredUsers
           , "visibleByAnonymousUsers" -> fields.visibleByAnonymousUsers)
    }
@@ -41,8 +42,15 @@ object BaasBoxTools{
   }
   
   
+  implicit def AuthenticationSocialNetworkToJs( auth: AuthenticationSocialNetwork): AuthenticationSocialNetworkJs={
+    JSON.parse(write[AuthenticationSocialNetwork](auth)).asInstanceOf[AuthenticationSocialNetworkJs]   
+  } 
+  
+  
   type DataCount = GenericResponse[CountResponse]
 }
+
+trait daoBase;
 
 /*
  * Used for the future transformation of the done/fail.
@@ -116,7 +124,7 @@ object BaasBox extends js.Object {
    def updateObject( id: String ,  collectionName: String ,document: js.Object): Callback[SaveDocumentResponse, ErrorResponse]= js.native
    
    //event.data will contains the object
-   def loadObject[A]( collectionName: String, id: String): Callback[GenericResponse[A], ErrorResponse]= js.native
+   def loadObject( collectionName: String, id: String): Callback[GenericResponse[js.Object], ErrorResponse]= js.native
    
    def fetchObjectsCount( collectionName: String ):  Callback[GenericResponse[CountResponse], ErrorResponse]= js.native
    
@@ -127,6 +135,14 @@ object BaasBox extends js.Object {
    def grantRoleAccessToObject(collection: String, objectId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
    
    def revokeRoleAccessToObject(collection: String, objectId:String, permission:String, role:String):Callback[GenericResponse[String], ErrorResponse]=js.native
+   
+   //
+   // Social
+   //
+   
+   def loginGoogle( userid: AuthenticationSocialNetworkJs ):Callback[GenericResponse[UserData], ErrorResponse] =js.native 
+  
+   def loginFacebook( userid: AuthenticationSocialNetworkJs ):Callback[GenericResponse[UserData], ErrorResponse] =js.native 
    
    //
    // Friendship and Social API
@@ -164,6 +180,14 @@ object BaasBox extends js.Object {
 }
 
 
+
+trait AuthenticationSocialNetworkJs extends js.Object {
+    val oauth_token:String= js.native
+    val oauth_secret:String= js.native
+}
+
+case class AuthenticationSocialNetwork( val oauth_token : String, val oauth_secret : String);
+
 case class PushMessage( val message:String, val users: List[String])
 
 
@@ -195,6 +219,12 @@ case class IPushResponse( val result: String, val data: String, val http_code: S
 @JSExportAll
 case class AdditionalFields(visibleByTheUser: js.Object= new js.Object, 
     visibleByRegisteredUsers: js.Object= new js.Object, visibleByAnonymousUsers: js.Object= new js.Object  ) 
+    
+trait AdditionalFieldsJs extends js.Object{
+    val visibleByTheUser: js.Object = js.native;
+    val visibleByRegisteredUsers: js.Object = js.native;
+    val visibleByAnonymousUsers: js.Object =js.native;   
+}
 
 trait Callback[ReturType, ErrorType] extends js.Object{
   def done(f:js.Function1[ReturType, Unit]):Callback[ReturType, ErrorType]= js.native
@@ -228,6 +258,8 @@ trait UserData extends js.Object{
   @JSName("user")
   val infoUser: User = js.native;
   val signUpDate: String = js.native;
+  val visibleByAnonymousUsers: js.Object = js.native
+  val visibleByRegisteredUsers: js.Object = js.native
   val visibleByTheUser: js.Object = js.native; //ex: "email": "cesare@email.com"
   val visibleByFriends: js.Object = js.native; //ex: "phoneNumber": "+1123456"
 }

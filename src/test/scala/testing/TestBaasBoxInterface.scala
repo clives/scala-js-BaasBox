@@ -82,7 +82,7 @@ val tests = TestSuite {
       }
       
       'loadObject{
-        BaasBox.loadObject[simpleDocumentResponse]( COLLECTION, ID_OBJECT).map{
+        BaasBox.loadObject( COLLECTION, ID_OBJECT).map{
           objectdata => 
             objectdata.data
         }
