@@ -3,7 +3,6 @@ import scala.scalajs.js
 import js.annotation._
 import scala.scalajs.js.typedarray.ArrayBuffer
 import scala.annotation.meta.field
-import scala.scalajs.js
 import scala.scalajs.js.JSON
 import js.JSConverters._
 import scala.concurrent.{Future, Promise}
@@ -11,6 +10,7 @@ import scala.util.{Try, Success, Failure}
 import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import upickle._
 import js.Dynamic.{ global => g }
+
 
 object BaasBoxTools{
   
