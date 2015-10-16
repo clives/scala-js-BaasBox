@@ -64,13 +64,13 @@ val tests = TestSuite {
       }
       
       
-      'FriendshipFolloUserThenFetch{
-        BaasBox.followUser(TEST_USER).map{ response =>
-          BaasBox.fetchFollowers("admin").map{
-            response => response.data.toList
-          }
-        }
-      }
+//      'FriendshipFolloUserThenFetch{
+//        BaasBox.followUser(TEST_USER).map{ response =>
+//          BaasBox.fetchFollowers("admin").map{
+//            response => response.data.toList
+//          }
+//        }
+//      }
 
       
       'Save{ 
@@ -108,11 +108,11 @@ val tests = TestSuite {
       }
     }
     
-    'grantRoleAccessToFile{
-      BaasBox.grantRoleAccessToFile( ID_FILE,  BaasBox.READ_PERMISSION,BaasBox.REGISTERED_ROLE ).map{
-        result =>assert( result.http_code == 200)
-      }
-    }
+//    'grantRoleAccessToFile{
+//      BaasBox.grantRoleAccessToFile( ID_FILE,  BaasBox.READ_PERMISSION,BaasBox.REGISTERED_ROLE ).map{
+//        result =>assert( result.http_code == 200)
+//      }
+//    }
 
     'revokeRoleAccessToFile{
       BaasBox.revokeRoleAccessToFile( ID_FILE3,  BaasBox.READ_PERMISSION,BaasBox.REGISTERED_ROLE ).map{
@@ -126,11 +126,11 @@ val tests = TestSuite {
       }
     }
     
-    'grantUserAccessToFile{
-      BaasBox.grantUserAccessToFile(ID_FILE2, BaasBox.READ_PERMISSION, "test_user").map{
-        response => response.result
-      }
-    }
+//    'grantUserAccessToFile{
+//      BaasBox.grantUserAccessToFile(ID_FILE2, BaasBox.READ_PERMISSION, "test_user").map{
+//        response => response.result
+//      }
+//    }
     
     'CreateCollection{
       loginFuture.flatMap{ _ =>

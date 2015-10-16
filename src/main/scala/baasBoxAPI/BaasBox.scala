@@ -50,17 +50,18 @@ object BaasBoxTools{
   type DataCount = GenericResponse[CountResponse]
 }
 
-trait daoBase;
 
 /*
  * Used for the future transformation of the done/fail.
  * insert the error msg into a Throwable
  */
-case class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{
-  
-}
+case class ThrowableWithErrorMsg[ErrorType](val error: ErrorType) extends Throwable{}
 
 
+
+/*
+ * Main BaasBox object from the js library
+ */
 @JSName("BaasBox")
 object BaasBox extends js.Object {
   
@@ -69,7 +70,7 @@ object BaasBox extends js.Object {
    // 
    val READ_PERMISSION: String= js.native
    val UPDATE_PERMISSION: String = js.native
-   val REGISTERED_ROLE: String = js.native
+   val REGISTERED_ROLE: String = js.native  //default role for new user
    val ALL_PERMISSION: String =js.native
   
    
@@ -180,7 +181,7 @@ object BaasBox extends js.Object {
 }
 
 
-
+//js version of AuthenticationSocialNetwork
 trait AuthenticationSocialNetworkJs extends js.Object {
     val oauth_token:String= js.native
     val oauth_secret:String= js.native
@@ -190,11 +191,7 @@ case class AuthenticationSocialNetwork( val oauth_token : String, val oauth_secr
 
 case class PushMessage( val message:String, val users: List[String])
 
-
-trait CountResponse extends js.Object{
-  val count: Int = js.native;
-}
-
+// Main trait to receive response from the server as { data : xxxx , ...}
 // response where the data field if of type "DataType". can be  String o more complexe
 // like js.Object as for Documents
 trait GenericResponse[DataType] extends js.Object {
@@ -203,6 +200,9 @@ trait GenericResponse[DataType] extends js.Object {
   val http_code: Int= js.native;
 }
 
+trait CountResponse extends js.Object{
+  val count: Int = js.native;
+}
 
 trait SaveDocumentResponse extends js.Object{
      val `@rid` : String= js.native;
@@ -231,21 +231,6 @@ trait Callback[ReturType, ErrorType] extends js.Object{
   def fail(f:js.Function1[ErrorType, Unit]):Callback[ReturType, ErrorType]= js.native  
 }    
     
-trait IUser extends js.Object {
-  def done(f:js.Function1[OneUser, Unit]):IResponse= js.native
-  def fail(f:js.Function1[OneUser, Unit]):IResponse= js.native
-}    
-    
-trait IUsers extends js.Object {
-  def done(f:js.Function1[Users, Unit]):IResponse= js.native
-  def fail(f:js.Function1[Users, Unit]):IResponse= js.native
-}
-
-trait IResponse extends js.Object {
-  def done(f:js.Function1[LoginResponse, Unit]):IResponse= js.native
-  def fail(f:js.Function1[LoginResponse, Unit]):IResponse= js.native
-}
-
 trait OneUser extends js.Object {
   val data:UserData = js.native;
 }
