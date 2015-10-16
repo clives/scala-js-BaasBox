@@ -378,7 +378,7 @@ var BaasBox = (function() {
       
       loginGoogle: function (params) {
           return $.ajax({
-              url: BaasBox.endPoint + '/social/facebook',
+              url: BaasBox.endPoint + '/social/google',
               type: 'POST',
               contentType: 'application/json',
               data: JSON.stringify(params),         
