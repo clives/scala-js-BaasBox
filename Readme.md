@@ -16,7 +16,8 @@ contains function to login using facebook / google.
 ```
    def loginGoogle( ..)  
    def loginFacebook( ..)
-```
+```    
+
 
 ### Return of methods:    
 You can use the default done(), fail() or importing BaasBoxTools._ using an implicit conversion to Future.
@@ -40,6 +41,13 @@ implicit def writerEmailToJsObject( ourinstance: email): js.Object ={
 implicit def readerEmailToJsObject( ourjs:  GenericResponse[js.Object]): email ={
    read[email](JSON.stringify(ourjs.data))
 }
- ```
+ ```  
+ 
+## Commands:
+
+compile : ```sbt fastOptJS```   
+test: ```sbt test```    
+publish: ```sbt publish-local```   , generate dependency: ```"baasboxapi" %%% "baasboxapi" % "0.1-SNAPSHOT" ```
+
 
 
