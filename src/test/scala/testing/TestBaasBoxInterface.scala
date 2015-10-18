@@ -19,6 +19,8 @@ import js.annotation._
 import scala.annotation.meta.field
 
 class nonError extends Throwable;
+
+
 /*
  * Note: the future have to be the last command in "block"
  * 
@@ -39,7 +41,7 @@ object Parallel extends TestSuite{
     else uniqueName(actualValue);
   }  
   
-val tests = TestSuite {
+lazy val tests = TestSuite {
   
   val ID_FILE="07dcf634-68df-4969-afa5-a5b932ecc5fd"
   val ID_FILE2="85fe1cb2-72a0-4ab9-9ba4-63961ca20a9f"
@@ -218,34 +220,6 @@ val tests = TestSuite {
     loginFuture
   }
   
-  "testLogin" - {
-    Future {
-      assert(true)
-    }
-  }
-  "testFail" - {
-    Future {
-      assert(true)
-    }
-  }
-  "normalSuccess" - {
-    assert(true)
-  }
-  "normalFail" - {
-    assert(true)
-  }
-}
 
-tests.runAsync().map {    results =>
-  
-  BaasBox.logout().map{
-    response => assert ( response.data== "ok")
-  }
-  
-  assert(results.toSeq(0).value.isFailure) // root
-  assert(results.toSeq(1).value.isFailure) // testSuccess
-  assert(results.toSeq(2).value.isFailure) // testFail
-  assert(results.toSeq(3).value.isFailure)// normalSuccess
 }
-
 }
