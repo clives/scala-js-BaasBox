@@ -44,6 +44,7 @@ libraryDependencies += "be.doeraene" %%% "scalajs-jquery" % "0.8.1"
 testFrameworks += new TestFramework("utest.runner.Framework")
 
 //add upickle for json parsing
+libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.2.8"
 //libraryDependencies += "com.lihaoyi" %%% "upickle" % "0.3.6"
 
 //add "window" for the testing
